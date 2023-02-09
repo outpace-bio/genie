@@ -79,3 +79,32 @@ def load_filepaths(datadir, dataset_names, max_n_res=None, min_n_res=None, class
 		output_filepaths.extend(filepaths)
 
 	return output_filepaths
+
+
+def coordinates_to_pdb(coordinates):
+	"""
+	Converts a list of coordinates to a .pdb string
+
+	Parameters
+	----------
+	coordinates : Numpy array of shape (N, 3)
+		List of coordinates, where each coordinate is a list of 3 floats
+
+	Returns
+	-------
+	pdb_string : str
+		.pdb string
+	"""
+	pdb_lines = []
+
+	# Loop through the coordinates and add the .pdb line for each alpha carbon
+	for i, coord in enumerate(coordinates):
+		line = "ATOM  {:5d}  CA  ALA A{:4d}    {:8.3f}{:8.3f}{:8.3f}  1.00  0.00".format(
+			i+1, i+1, coord[0], coord[1], coord[2]
+		)
+		pdb_lines.append(line)
+
+	# Join the lines together with newline characters to create the final .pdb string
+	pdb_string = "\n".join(pdb_lines)
+
+	return pdb_string

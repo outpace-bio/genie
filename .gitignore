@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Paul -- Ignore data files used for training
+data/**/*.ent
+**/*.npy
+**/*.ckpt
+**/*.pdb
+runs/
+wandb/

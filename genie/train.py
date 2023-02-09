@@ -5,6 +5,8 @@ from pytorch_lightning.trainer import Trainer, seed_everything
 from pytorch_lightning.loggers import WandbLogger, TensorBoardLogger
 
 from genie.config import Config
+# import sys
+# sys.path.append('/data/psample/repos/genie')
 from genie.data.data_module import SCOPeDataModule
 from genie.diffusion.genie import Genie
 

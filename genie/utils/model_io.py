@@ -2,10 +2,10 @@ import os
 import sys
 import glob
 import numpy as np
-
+# import sys
+# sys.path.append('../')
 from genie.config import Config
-from genie.diffusion.Genie import Genie
-
+from genie.diffusion.genie import Genie
 
 def get_versions(rootdir, name):
 	basedir = os.path.join(rootdir, name)

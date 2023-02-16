@@ -19,6 +19,7 @@ class PairFeatureNet(nn.Module):
 		self.n_bin = 2 * relpos_k + 1
 		self.linear_relpos = nn.Linear(self.n_bin, c_p)
 
+		# Paul - template is the pairwise-distance part?
 		self.template_fn, c_template = get_template_fn(template_type)
 		self.linear_template = nn.Linear(c_template, c_p)
 

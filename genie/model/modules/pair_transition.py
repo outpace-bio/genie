@@ -66,7 +66,7 @@ class PairTransition(nn.Module):
         # DISCREPANCY: DeepMind forgets to apply the mask in this module.
         if(mask is None):
             mask = z.new_ones(z.shape[:-1], requires_grad=False)
-
+            
         # [*, N_res, N_res, 1]
         mask = mask.unsqueeze(-1)
 

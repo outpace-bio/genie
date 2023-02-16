@@ -35,6 +35,13 @@ class SingleFeatureNet(nn.Module):
 		timestep_emb = sinusoidal_encoding(timesteps.view(b, 1), self.n_timestep, self.c_timestep_emb)
 		timestep_emb = timestep_emb.repeat(1, max_n_res, 1)
 		timestep_emb = timestep_emb * mask.unsqueeze(-1)
+		
+		# Paul changes
+		# fixed_coord_ts_emb = sinusoidal_encoding(torch.tensor([0]).view(b, 1), self.n_timestep, self.c_timestep_emb)
+		# fixed_coord_ts_emb = fixed_coord_ts_emb.repeat(1, 9, 1)
+		# # print(fixed_coord_ts_emb.shape)
+		# timestep_emb[:, :9, :] = fixed_coord_ts_emb
+		# End
 
 		return self.linear(torch.cat([
 			pos_emb,

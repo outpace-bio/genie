@@ -109,9 +109,17 @@ class T:
     def compose(self, t):
         rot_1, trn_1 = self.rots, self.trans
         rot_2, trn_2 = t.rots, t.trans
+        # print(rot_2.shape, trn_2.shape)
+        # torch.Size([1, 128, 3, 3]) torch.Size([1, 128, 3])
+
+        # rot_2[:, :10, :, :] = 1
+        # trn_2[:, :10, :] = 1
 
         rot = rot_matmul(rot_1, rot_2)
         trn = rot_vec_mul(rot_1, trn_2) + trn_1
+
+        # rot[:, :10, :, :] = rot_1[:, :10, :, :]
+        # trn[:, :10, :] = trn_1[:, :10, :]
 
         return T(rot, trn)
 

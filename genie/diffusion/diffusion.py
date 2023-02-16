@@ -60,11 +60,11 @@ class Diffusion(LightningModule, ABC):
 	def loss_fn(self, tnoise, ts, s):
 		raise NotImplemented
 
-	def p_sample_loop(self, mask, verbose=True):
+	def p_sample_loop(self, mask, fixed_coords=None, verbose=True):
 		if not self.setup:
 			self.setup_schedule()
 			self.setup = True
-		ts = self.sample_frames(mask)
+		ts = self.sample_frames(mask, fixed_coords=fixed_coords)
 		ts_seq = [ts]
 		for i in tqdm(reversed(range(self.config.diffusion['n_timestep'])), desc='sampling loop time step', total=self.config.diffusion['n_timestep'], disable=not verbose):
 			s = torch.Tensor([i] * mask.shape[0]).long().to(self.device)

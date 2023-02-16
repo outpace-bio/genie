@@ -81,6 +81,8 @@ def load_filepaths(datadir, dataset_names, max_n_res=None, min_n_res=None, class
 	return output_filepaths
 
 
+# Paul additions
+
 def coordinates_to_pdb(coordinates):
 	"""
 	Converts a list of coordinates to a .pdb string
@@ -108,3 +110,28 @@ def coordinates_to_pdb(coordinates):
 	pdb_string = "\n".join(pdb_lines)
 
 	return pdb_string
+
+def get_ca_coordinates_from_pdb(pdb_file):
+    """
+    Extracts the coordinates of alpha carbons (Ca) from a PDB file.
+
+    Args:
+        pdb_file (str): The name of the PDB file.
+
+    Returns:
+        A list of tuples, where each tuple represents the coordinates of a single Ca atom.
+    """
+    from Bio.PDB import PDBParser
+
+    parser = PDBParser()
+    structure = parser.get_structure('structure', pdb_file)
+    ca_atoms = []
+    for model in structure:
+        for chain in model:
+            for residue in chain:
+                try:
+                    ca_atom = residue['CA']
+                except KeyError:
+                    continue
+                ca_atoms.append(ca_atom.get_coord())
+    return np.array(ca_atoms)

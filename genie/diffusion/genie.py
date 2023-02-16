@@ -45,8 +45,14 @@ class Genie(Diffusion):
 	def sample_timesteps(self, num_samples):
 		return torch.randint(0, self.config.diffusion['n_timestep'], size=(num_samples,)).to(self.device)
 
-	def sample_frames(self, mask):
-		trans = torch.randn((mask.shape[0], mask.shape[1], 3)).to(self.device)
+	def sample_frames(self, mask, fixed_coords=None):
+		if fixed_coords is None:
+			trans = torch.randn((mask.shape[0], mask.shape[1], 3)).to(self.device)
+		else:
+			trans = torch.randn((mask.shape[0], mask.shape[1] - fixed_coords.shape[0], 3)).to(self.device)
+			fixed_coords = fixed_coords.repeat(mask.shape[0], 1, 1)
+			trans = torch.concat([fixed_coords, trans], dim=1)
+
 		trans = trans * mask.unsqueeze(-1)
 		rots = compute_frenet_frames(trans, mask)
 		return T(rots, trans)
@@ -69,9 +75,11 @@ class Genie(Diffusion):
 		w_noise = ((1. - self.alphas[s].to(self.device)) / self.sqrt_one_minus_alphas_cumprod[s].to(self.device)).view(-1, 1, 1)
 
 		# [b, n_res]
-		noise_pred_trans = ts.trans - self.model(ts, s, mask).trans
+		model_out = self.model(ts, s, mask).trans
+		noise_pred_trans = ts.trans - model_out
 		noise_pred_rots = torch.eye(3).view(1, 1, 3, 3).repeat(ts.shape[0], ts.shape[1], 1, 1)
 		noise_pred = T(noise_pred_rots, noise_pred_trans)
+		# noise_pred.trans[:, :9, :] = 0.0
 
 		# [b, n_res, 3]
 		trans_mean = (1. / self.sqrt_alphas[s]).view(-1, 1, 1).to(self.device) * (ts.trans - w_noise * noise_pred.trans)

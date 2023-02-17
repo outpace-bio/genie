@@ -1,0 +1,15 @@
+name enzyme_comm_128
+numEpoches 10000
+batchSize 12
+minimumNumResidues 20
+maximumNumResidues 128
+dataDirectory /data/psample/data/genie_proteins/meta/enzyme_commision_meta.tsv
+datasetNames enzyme_commission
+datasetClasses 55
+templateType v1
+numPairTransformLayers 5
+includeTriangularAttention False
+log_dir runs
+logEverySteps 1
+checkpointEveryEpoches 20
+learningRate 1e-4

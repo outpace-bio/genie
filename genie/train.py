@@ -3,10 +3,10 @@ import argparse
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.trainer import Trainer, seed_everything
 from pytorch_lightning.loggers import WandbLogger, TensorBoardLogger
-
+import sys
+sys.path.append('../genie')
 from genie.config import Config
 import sys
-sys.path.append('/data/psample/repos/genie')
 from genie.data.data_module import SCOPeDataModule, EnzymeCommissionDataModule
 from genie.diffusion.genie import Genie
 
@@ -37,9 +37,10 @@ def main(args):
 	seed_everything(config.training['seed'], workers=True)
 
 	# data module
-	if config.io['dataset_names'] == 'enzyme_commission':
+	print(config.io)
+	if config.io['dataset_names'][0] == 'enzyme_commission':
 		dm = EnzymeCommissionDataModule(**config.io, batch_size=config.training['batch_size'])
-	elif config.io['dataset_names'] == 'scope':
+	elif config.io['dataset_names'][0] == 'scope':
 		dm = SCOPeDataModule(**config.io, batch_size=config.training['batch_size'])
 
 	# model

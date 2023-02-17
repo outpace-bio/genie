@@ -46,7 +46,7 @@ class SCOPeDataModule(LightningDataModule):
 class EnzymeCommissionDataModule(LightningDataModule):
 
 	def __init__(self, name, log_dir, data_dir, max_n_res, min_n_res, dataset_names, dataset_size, dataset_classes, batch_size):
-		super(SCOPeDataModule, self).__init__()
+		super(EnzymeCommissionDataModule, self).__init__()
 
 		self.name = name
 		self.log_dir = log_dir

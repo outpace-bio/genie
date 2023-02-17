@@ -30,13 +30,20 @@ class Genie(Diffusion):
 		self.posterior_mean_coef2 = self.one_minus_alphas_cumprod_prev * self.sqrt_alphas / self.one_minus_alphas_cumprod
 		self.posterior_variance = self.betas * self.one_minus_alphas_cumprod_prev / self.one_minus_alphas_cumprod
 
-	def transform(self, batch):
+	def transform(self, batch, ca_coords_only=True):
+		if len(batch) == 2:
+			coords, mask = batch
+		elif len(batch) == 3:
+			coords, mask, label = batch
 
-		coords, mask = batch
 		coords = coords.float()
 		mask = mask.float()
 
-		ca_coords = coords[:, 1::3]
+		if ca_coords_only:
+			ca_coords = coords
+		else:
+			ca_coords = coords[:, 1::3]
+
 		trans = ca_coords - torch.mean(ca_coords, dim=1, keepdim=True)
 		rots = compute_frenet_frames(trans, mask)
 

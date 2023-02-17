@@ -5,9 +5,9 @@ from pytorch_lightning.trainer import Trainer, seed_everything
 from pytorch_lightning.loggers import WandbLogger, TensorBoardLogger
 
 from genie.config import Config
-# import sys
-# sys.path.append('/data/psample/repos/genie')
-from genie.data.data_module import SCOPeDataModule
+import sys
+sys.path.append('/data/psample/repos/genie')
+from genie.data.data_module import SCOPeDataModule, EnzymeCommissionDataModule
 from genie.diffusion.genie import Genie
 
 
@@ -37,7 +37,10 @@ def main(args):
 	seed_everything(config.training['seed'], workers=True)
 
 	# data module
-	dm = SCOPeDataModule(**config.io, batch_size=config.training['batch_size'])
+	if config.io['dataset_names'] == 'enzyme_commission':
+		dm = EnzymeCommissionDataModule(**config.io, batch_size=config.training['batch_size'])
+	elif config.io['dataset_names'] == 'scope':
+		dm = SCOPeDataModule(**config.io, batch_size=config.training['batch_size'])
 
 	# model
 	model = Genie(config)

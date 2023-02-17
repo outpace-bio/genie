@@ -132,7 +132,6 @@ dmypy.json
 # Paul -- Ignore data files used for training
 data/**/*.ent
 **/*.npy
-**/*.ckpt
+# **/*.ckpt
 **/*.pdb
-runs/
 wandb/
